@@ -42,7 +42,10 @@ class AudioEngine {
   async initialize(): Promise<void> {
     if (this.initialized && this.context) return
 
-    this.context = new AudioContext()
+    // iOS Safari / WebKit 互換
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext
+    this.context = new AudioCtx()
     this.masterGain = this.context.createGain()
     this.masterGain.gain.value = this.masterVolume
     this.masterGain.connect(this.context.destination)
