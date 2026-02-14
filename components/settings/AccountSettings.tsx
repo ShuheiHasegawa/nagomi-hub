@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useAuth } from '@/components/providers/AuthProvider'
 import { createClient } from '@/lib/supabase/client'
@@ -14,6 +14,7 @@ export default function AccountSettings() {
   const [dataSync, setDataSync] = useState(true)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
+  const messageTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const loadProfile = useCallback(async () => {
     if (!user) return
@@ -42,7 +43,8 @@ export default function AccountSettings() {
 
     setSaving(false)
     setMessage(error ? '保存に失敗しました' : '保存しました')
-    setTimeout(() => setMessage(''), 3000)
+    if (messageTimeoutRef.current) clearTimeout(messageTimeoutRef.current)
+    messageTimeoutRef.current = setTimeout(() => setMessage(''), 3000)
   }
 
   return (

@@ -30,6 +30,7 @@ const playfairDisplay = Playfair_Display({
 export const metadata: Metadata = {
   title: 'Nagomi Hub - 放置系癒やしゲーム',
   description: 'リラックスできる放置系の癒やしゲーム',
+  manifest: '/manifest.json',
 }
 
 export default function RootLayout({

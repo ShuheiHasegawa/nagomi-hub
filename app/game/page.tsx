@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { useTheme } from 'next-themes'
 import { useState, useEffect } from 'react'
 
 import CanvasParticles from '@/components/effects/CanvasParticles'
@@ -19,7 +18,6 @@ export default function GamePage() {
   const [timerOpen, setTimerOpen] = useState(false)
   const [progressOpen, setProgressOpen] = useState(false)
   const [soundOpen, setSoundOpen] = useState(false)
-  const { theme } = useTheme()
   const [primaryColor, setPrimaryColor] = useState('var(--color-primary)')
   const [secondaryColor, setSecondaryColor] = useState('var(--color-secondary)')
 
@@ -47,7 +45,7 @@ export default function GamePage() {
     })
 
     return () => observer.disconnect()
-  }, [theme])
+  }, [])
 
   return (
     <div className="h-screen overflow-hidden relative noise">
