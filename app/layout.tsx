@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Quicksand, Noto_Sans_JP, Playfair_Display } from 'next/font/google'
 
+import { AudioProvider } from '@/components/providers/AudioProvider'
 import { AuthProvider } from '@/components/providers/AuthProvider'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
 
@@ -47,7 +48,9 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange={false}
         >
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <AudioProvider>{children}</AudioProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
