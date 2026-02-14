@@ -1,7 +1,11 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+
+import { useAudio } from '@/components/providers/AudioProvider'
+import { useAuth } from '@/components/providers/AuthProvider'
+import { getUserSettings, saveUserSettings } from '@/lib/settings/settings-service'
 
 interface MusicTrack {
   id: string
@@ -25,8 +29,34 @@ const musicTracks: MusicTrack[] = [
 ]
 
 export default function MusicSettings() {
+  const { user } = useAuth()
+  const { setChannelVolume } = useAudio()
   const [tracks, setTracks] = useState<MusicTrack[]>(musicTracks)
   const [bgmVolume, setBgmVolume] = useState(60)
+  const saveTimeout = useRef<NodeJS.Timeout | null>(null)
+
+  const loadSettings = useCallback(async () => {
+    if (!user) return
+    const settings = await getUserSettings(user.id)
+    setBgmVolume(settings.bgm_volume)
+  }, [user])
+
+  useEffect(() => {
+    loadSettings()
+  }, [loadSettings])
+
+  const handleVolumeChange = (value: number) => {
+    setBgmVolume(value)
+    setChannelVolume('bgm', value / 100)
+
+    // デバウンス保存 (500ms)
+    if (saveTimeout.current) clearTimeout(saveTimeout.current)
+    if (user) {
+      saveTimeout.current = setTimeout(() => {
+        saveUserSettings(user.id, { bgm_volume: value })
+      }, 500)
+    }
+  }
 
   const handlePlayToggle = (id: string) => {
     setTracks((prev) =>
@@ -51,7 +81,7 @@ export default function MusicSettings() {
           min="0"
           max="100"
           value={bgmVolume}
-          onChange={(e) => setBgmVolume(Number(e.target.value))}
+          onChange={(e) => handleVolumeChange(Number(e.target.value))}
           className="w-full h-2 bg-primary-200 rounded-lg appearance-none cursor-pointer accent-primary-500"
         />
       </div>

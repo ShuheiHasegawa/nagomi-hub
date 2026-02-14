@@ -146,7 +146,7 @@ export default function GamePage() {
       </Modal>
 
       <Modal isOpen={progressOpen} onClose={() => setProgressOpen(false)} title="進捗">
-        <ProgressBar currentXP={450} nextLevelXP={600} level={5} />
+        <ProgressBar />
       </Modal>
 
       <Modal isOpen={soundOpen} onClose={() => setSoundOpen(false)} title="環境音">

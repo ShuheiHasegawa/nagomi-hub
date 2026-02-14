@@ -1,13 +1,49 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+
+import { useAuth } from '@/components/providers/AuthProvider'
+import { createClient } from '@/lib/supabase/client'
 
 export default function AccountSettings() {
-  const [email, setEmail] = useState('user@example.com')
-  const [displayName, setDisplayName] = useState('ユーザー')
+  const { user } = useAuth()
+  const [email, setEmail] = useState('')
+  const [displayName, setDisplayName] = useState('')
   const [notifications, setNotifications] = useState(true)
   const [dataSync, setDataSync] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [message, setMessage] = useState('')
+
+  const loadProfile = useCallback(async () => {
+    if (!user) return
+    setEmail(user.email ?? '')
+
+    const supabase = createClient()
+    const { data } = await supabase.from('profiles').select('display_name').eq('id', user.id).single()
+
+    if (data?.display_name) setDisplayName(data.display_name)
+  }, [user])
+
+  useEffect(() => {
+    loadProfile()
+  }, [loadProfile])
+
+  const handleSave = async () => {
+    if (!user) return
+    setSaving(true)
+    setMessage('')
+
+    const supabase = createClient()
+    const { error } = await supabase
+      .from('profiles')
+      .update({ display_name: displayName })
+      .eq('id', user.id)
+
+    setSaving(false)
+    setMessage(error ? '保存に失敗しました' : '保存しました')
+    setTimeout(() => setMessage(''), 3000)
+  }
 
   return (
     <div className="glass-strong rounded-2xl p-6 space-y-6">
@@ -31,10 +67,10 @@ export default function AccountSettings() {
           <input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 glass rounded-xl text-primary-700 placeholder-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-400"
-            placeholder="email@example.com"
+            readOnly
+            className="w-full px-4 py-2 glass rounded-xl text-primary-700/60 cursor-not-allowed"
           />
+          <p className="text-xs text-primary-500 mt-1">メールアドレスは変更できません</p>
         </div>
       </div>
 
@@ -79,13 +115,22 @@ export default function AccountSettings() {
         </div>
       </div>
 
+      {/* メッセージ */}
+      {message && (
+        <p className={`text-sm ${message.includes('失敗') ? 'text-red-500' : 'text-green-500'}`}>
+          {message}
+        </p>
+      )}
+
       {/* 保存ボタン */}
       <motion.button
-        className="w-full py-3 bg-primary-500 text-white rounded-xl font-semibold hover:bg-primary-600 transition-colors"
+        onClick={handleSave}
+        disabled={saving}
+        className="w-full py-3 bg-primary-500 text-white rounded-xl font-semibold hover:bg-primary-600 transition-colors disabled:opacity-50"
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       >
-        変更を保存
+        {saving ? '保存中...' : '変更を保存'}
       </motion.button>
     </div>
   )

@@ -2,11 +2,18 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import { useCallback, useEffect, useState } from 'react'
 
 import AchievementCard from '@/components/achievements/AchievementCard'
+import { useAuth } from '@/components/providers/AuthProvider'
 import ThemeSwitcher from '@/components/ui/ThemeSwitcher'
+import {
+  getAllAchievements,
+  getUserAchievements,
+} from '@/lib/achievements/achievement-service'
+import type { Achievement as AchievementMaster } from '@/lib/achievements/achievement-service'
 
-interface Achievement {
+interface AchievementView {
   id: string
   title: string
   description: string
@@ -17,81 +24,66 @@ interface Achievement {
   unlockedAt?: string
 }
 
-const achievements: Achievement[] = [
-  {
-    id: '1',
-    title: '初めてのセッション',
-    description: '最初のポモドーロセッションを完了',
-    icon: '🎯',
-    unlocked: true,
-    unlockedAt: '2024-01-15',
-  },
-  {
-    id: '2',
-    title: '継続の力',
-    description: '7日連続でセッションを完了',
-    icon: '🔥',
-    unlocked: true,
-    unlockedAt: '2024-01-22',
-  },
-  {
-    id: '3',
-    title: 'マスター',
-    description: '100回のセッションを完了',
-    icon: '👑',
-    unlocked: false,
-    progress: 45,
-    maxProgress: 100,
-  },
-  {
-    id: '4',
-    title: '夜更かし',
-    description: '深夜にセッションを完了',
-    icon: '🌙',
-    unlocked: true,
-    unlockedAt: '2024-01-20',
-  },
-  {
-    id: '5',
-    title: '早起き',
-    description: '朝6時前にセッションを完了',
-    icon: '🌅',
-    unlocked: false,
-    progress: 0,
-    maxProgress: 1,
-  },
-  {
-    id: '6',
-    title: '集中の達人',
-    description: '1日で10セッションを完了',
-    icon: '⚡',
-    unlocked: false,
-    progress: 7,
-    maxProgress: 10,
-  },
-  {
-    id: '7',
-    title: '環境音マスター',
-    description: 'すべての環境音を試す',
-    icon: '🎵',
-    unlocked: true,
-    unlockedAt: '2024-01-18',
-  },
-  {
-    id: '8',
-    title: 'カスタマイズ好き',
-    description: 'すべての背景とキャラクターを試す',
-    icon: '🎨',
-    unlocked: false,
-    progress: 5,
-    maxProgress: 8,
-  },
-]
+function mergeAchievements(
+  all: AchievementMaster[],
+  userMap: Map<string, { progress: number; unlocked: boolean; unlocked_at: string | null }>
+): AchievementView[] {
+  return all.map((a) => {
+    const user = userMap.get(a.id)
+    return {
+      id: a.id,
+      title: a.title,
+      description: a.description,
+      icon: a.icon,
+      unlocked: user?.unlocked ?? false,
+      progress: user?.progress ?? 0,
+      maxProgress: a.condition_value,
+      unlockedAt: user?.unlocked_at ?? undefined,
+    }
+  })
+}
 
 export default function AchievementsPage() {
+  const { user } = useAuth()
+  const [achievements, setAchievements] = useState<AchievementView[]>([])
+  const [loading, setLoading] = useState(true)
+
+  const loadAchievements = useCallback(async () => {
+    setLoading(true)
+    const allAchievements = await getAllAchievements()
+
+    if (user) {
+      const userAchievements = await getUserAchievements(user.id)
+      const userMap = new Map(
+        userAchievements.map((ua) => [
+          ua.achievement_id,
+          { progress: ua.progress, unlocked: ua.unlocked, unlocked_at: ua.unlocked_at },
+        ])
+      )
+      setAchievements(mergeAchievements(allAchievements, userMap))
+    } else {
+      setAchievements(
+        allAchievements.map((a) => ({
+          id: a.id,
+          title: a.title,
+          description: a.description,
+          icon: a.icon,
+          unlocked: false,
+          progress: 0,
+          maxProgress: a.condition_value,
+        }))
+      )
+    }
+    setLoading(false)
+  }, [user])
+
+  useEffect(() => {
+    loadAchievements()
+  }, [loadAchievements])
+
   const unlockedCount = achievements.filter((a) => a.unlocked).length
   const totalCount = achievements.length
-  const completionPercentage = (unlockedCount / totalCount) * 100
+  const completionPercentage = totalCount > 0 ? (unlockedCount / totalCount) * 100 : 0
 
   return (
     <div className="min-h-screen p-4 md:p-8 noise bg-base-100">
@@ -141,11 +133,15 @@ export default function AchievementsPage() {
         </motion.header>
 
         {/* 実績グリッド */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {achievements.map((achievement, index) => (
-            <AchievementCard key={achievement.id} achievement={achievement} index={index} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="text-center py-12 text-base-content/50">読み込み中...</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {achievements.map((achievement, index) => (
+              <AchievementCard key={achievement.id} achievement={achievement} index={index} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )

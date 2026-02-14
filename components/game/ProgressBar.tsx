@@ -1,15 +1,56 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useCallback, useEffect, useState } from 'react'
 
-interface ProgressBarProps {
-  currentXP: number
-  nextLevelXP: number
-  level: number
+import { useAuth } from '@/components/providers/AuthProvider'
+import { calculateLevel, getProfile } from '@/lib/profile/profile-service'
+import { getUserStats } from '@/lib/timer/session-service'
+
+interface Stats {
+  totalSessions: number
+  totalMinutes: number
+  totalXp: number
 }
 
-export default function ProgressBar({ currentXP, nextLevelXP, level }: ProgressBarProps) {
-  const progress = (currentXP / nextLevelXP) * 100
+export default function ProgressBar() {
+  const { user } = useAuth()
+  const [level, setLevel] = useState(1)
+  const [currentXP, setCurrentXP] = useState(0)
+  const [nextLevelXP, setNextLevelXP] = useState(100)
+  const [stats, setStats] = useState<Stats>({ totalSessions: 0, totalMinutes: 0, totalXp: 0 })
+
+  const loadData = useCallback(async () => {
+    if (!user) return
+
+    const [profile, userStats] = await Promise.all([getProfile(user.id), getUserStats(user.id)])
+
+    if (profile) {
+      const calc = calculateLevel(profile.total_xp)
+      setLevel(calc.level)
+      setCurrentXP(calc.currentLevelXp)
+      setNextLevelXP(calc.nextLevelXp)
+    }
+
+    if (userStats) {
+      const s = 'stats' in userStats && userStats.stats ? userStats.stats : null
+      if (s) {
+        setStats({
+          totalSessions: s.totalSessions,
+          totalMinutes: s.totalMinutes,
+          totalXp: s.totalXp,
+        })
+      }
+    }
+  }, [user])
+
+  useEffect(() => {
+    loadData()
+  }, [loadData])
+
+  const progress = nextLevelXP > 0 ? (currentXP / nextLevelXP) * 100 : 0
+  const hours = Math.floor(stats.totalMinutes / 60)
+  const minutes = stats.totalMinutes % 60
 
   return (
     <div className="space-y-3">
@@ -35,16 +76,18 @@ export default function ProgressBar({ currentXP, nextLevelXP, level }: ProgressB
       {/* 統計情報 */}
       <div className="grid grid-cols-3 gap-4 pt-2">
         <div className="text-center">
-          <p className="text-2xl font-bold text-primary">12</p>
+          <p className="text-2xl font-bold text-primary">{stats.totalSessions}</p>
           <p className="text-xs text-base-content/60">セッション</p>
         </div>
         <div className="text-center">
-          <p className="text-2xl font-bold text-primary">5h 30m</p>
+          <p className="text-2xl font-bold text-primary">
+            {hours}h {minutes}m
+          </p>
           <p className="text-xs text-base-content/60">総時間</p>
         </div>
         <div className="text-center">
-          <p className="text-2xl font-bold text-primary">8</p>
-          <p className="text-xs text-base-content/60">実績</p>
+          <p className="text-2xl font-bold text-primary">{stats.totalXp}</p>
+          <p className="text-xs text-base-content/60">XP</p>
         </div>
       </div>
     </div>
