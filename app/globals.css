@@ -1,0 +1,216 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* デフォルトテーマ（ライト） */
+:root {
+  --color-primary-50: #f0f9f4;
+  --color-primary-100: #dcefe3;
+  --color-primary-200: #b8dfc7;
+  --color-primary-300: #a8d5ba;
+  --color-primary-400: #7bb896;
+  --color-primary-500: #5a9d7a;
+  --color-primary-600: #457d61;
+  --color-primary-700: #38644e;
+  --color-primary-800: #2e5041;
+  --color-primary-900: #274236;
+  --color-accent-orange: #ffb88c;
+  --color-accent-blue: #b8e0f6;
+
+  /* テーマカラー変数 */
+  --color-base-100: #f0f9f4;
+  --color-base-200: #dcefe3;
+  --color-base-300: #b8dfc7;
+  --color-base-content: #274236;
+  --color-primary: #5a9d7a;
+  --color-primary-content: #ffffff;
+  --color-secondary: #7bb896;
+  --color-secondary-content: #ffffff;
+  --color-accent: #ffb88c;
+  --color-accent-content: #274236;
+}
+
+/* ダークテーマ */
+[data-theme='dark'] {
+  --color-base-100: #1a1a1a;
+  --color-base-200: #2d2d2d;
+  --color-base-300: #404040;
+  --color-base-content: #e5e5e5;
+  --color-primary: #5a9d7a;
+  --color-primary-content: #ffffff;
+  --color-secondary: #7bb896;
+  --color-secondary-content: #ffffff;
+  --color-accent: #ffb88c;
+  --color-accent-content: #1a1a1a;
+}
+
+/* 木漏れ日テーマ */
+[data-theme='komorebi'] {
+  --color-base-100: #f0f9f4;
+  --color-base-200: #dcefe3;
+  --color-base-300: #b8dfc7;
+  --color-base-content: #274236;
+  --color-primary: #5a9d7a;
+  --color-primary-content: #ffffff;
+  --color-secondary: #7bb896;
+  --color-secondary-content: #ffffff;
+  --color-accent: #ffb88c;
+  --color-accent-content: #274236;
+}
+
+/* 海テーマ */
+[data-theme='ocean'] {
+  --color-base-100: #e6f2ff;
+  --color-base-200: #b8d4f0;
+  --color-base-300: #8bb6e0;
+  --color-base-content: #1e3a5f;
+  --color-primary: #1e3a5f;
+  --color-primary-content: #ffffff;
+  --color-secondary: #2e5984;
+  --color-secondary-content: #ffffff;
+  --color-accent: #4a90a4;
+  --color-accent-content: #ffffff;
+}
+
+/* カップケーキテーマ */
+[data-theme='cupcake'] {
+  --color-base-100: #fef7f7;
+  --color-base-200: #f5e6e6;
+  --color-base-300: #e8d5d5;
+  --color-base-content: #2d1b2e;
+  --color-primary: #65c3c8;
+  --color-primary-content: #ffffff;
+  --color-secondary: #ef9fbc;
+  --color-secondary-content: #ffffff;
+  --color-accent: #eeaf3a;
+  --color-accent-content: #ffffff;
+}
+
+/* 森テーマ */
+[data-theme='forest'] {
+  --color-base-100: #171212;
+  --color-base-200: #2d2424;
+  --color-base-300: #433636;
+  --color-base-content: #d7cccc;
+  --color-primary: #1eb854;
+  --color-primary-content: #ffffff;
+  --color-secondary: #1db990;
+  --color-secondary-content: #ffffff;
+  --color-accent: #1db990;
+  --color-accent-content: #ffffff;
+}
+
+/* エメラルドテーマ */
+[data-theme='emerald'] {
+  --color-base-100: #ffffff;
+  --color-base-200: #f0f9f4;
+  --color-base-300: #dcefe3;
+  --color-base-content: #1c4532;
+  --color-primary: #66cc8a;
+  --color-primary-content: #ffffff;
+  --color-secondary: #377cfb;
+  --color-secondary-content: #ffffff;
+  --color-accent: #f68067;
+  --color-accent-content: #ffffff;
+}
+
+/* 夜テーマ */
+[data-theme='night'] {
+  --color-base-100: #0f1729;
+  --color-base-200: #1e293b;
+  --color-base-300: #334155;
+  --color-base-content: #e2e8f0;
+  --color-primary: #38bdf8;
+  --color-primary-content: #0f1729;
+  --color-secondary: #818cf8;
+  --color-secondary-content: #ffffff;
+  --color-accent: #f472b6;
+  --color-accent-content: #ffffff;
+}
+
+/* 夕焼けテーマ */
+[data-theme='sunset'] {
+  --color-base-100: #fff4e6;
+  --color-base-200: #ffe0b3;
+  --color-base-300: #ffcc80;
+  --color-base-content: #bf360c;
+  --color-primary: #ff6f00;
+  --color-primary-content: #ffffff;
+  --color-secondary: #ff8f00;
+  --color-secondary-content: #ffffff;
+  --color-accent: #ffb300;
+  --color-accent-content: #ffffff;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-base-100);
+    color: var(--color-base-content);
+  }
+
+  body {
+    background-color: var(--color-base-100);
+    color: var(--color-base-content);
+    font-family: var(--font-quicksand), var(--font-noto), sans-serif;
+    min-height: 100vh;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .font-playfair {
+    font-family: var(--font-playfair), serif;
+  }
+}
+
+@layer utilities {
+  .glass {
+    backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--color-base-content) 30%, transparent);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    background-color: color-mix(in srgb, var(--color-base-100) 20%, transparent);
+    border-color: color-mix(in srgb, var(--color-base-content) 30%, transparent);
+  }
+
+  .glass-strong {
+    backdrop-filter: blur(16px);
+    border: 1px solid color-mix(in srgb, var(--color-base-content) 40%, transparent);
+    box-shadow:
+      0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    background-color: color-mix(in srgb, var(--color-base-100) 40%, transparent);
+    border-color: color-mix(in srgb, var(--color-base-content) 40%, transparent);
+  }
+
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  /* ダークモード時のテキストシャドウ調整 */
+  [data-theme='dark'] .text-shadow,
+  [data-theme='night'] .text-shadow {
+    text-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+  }
+
+  [data-theme='dark'] .text-shadow-lg,
+  [data-theme='night'] .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* ノイズテクスチャ */
+.noise::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.3;
+}
