@@ -1,0 +1,85 @@
+{
+  "landing": {
+    "title": "Nagomi Hub",
+    "subtitle": "Immersive work BGM & task management for focused productivity",
+    "enterRoom": "Enter Room",
+    "entering": "Entering...",
+    "audioHint": "Click to enable audio",
+    "selectRoom": "Choose your room"
+  },
+  "features": {
+    "bgm": "LoFi BGM & Ambience",
+    "bgmDesc": "Mix rain, forest, ocean & fire ambient sounds",
+    "timer": "Pomodoro Timer",
+    "timerDesc": "Accurate timing with Web Worker",
+    "spirits": "Spirit Collection",
+    "spiritsDesc": "Spirits gather as you focus",
+    "themes": "9 Themes",
+    "themesDesc": "Forest, ocean, sakura, autumn & more"
+  },
+  "nav": {
+    "game": "Game",
+    "settings": "Settings",
+    "achievements": "Achievements",
+    "spirits": "Spirits",
+    "spiritBook": "Spirit Book",
+    "backToGame": "Back to Game"
+  },
+  "timer": {
+    "title": "Pomodoro Timer",
+    "work": "Work",
+    "shortBreak": "Short Break",
+    "longBreak": "Long Break",
+    "start": "Start",
+    "pause": "Pause",
+    "resume": "Resume",
+    "stop": "Stop",
+    "next": "Next Session",
+    "completed": "Completed Sessions"
+  },
+  "settings": {
+    "title": "Settings",
+    "customize": "Customize your experience",
+    "music": "Music Settings",
+    "bgmVolume": "BGM Volume",
+    "customization": "Customization",
+    "account": "Account Settings",
+    "displayName": "Display Name",
+    "email": "Email",
+    "emailReadonly": "Email cannot be changed",
+    "notifications": "Notifications",
+    "notificationsDesc": "Timer completion notifications",
+    "dataSync": "Data Sync",
+    "dataSyncDesc": "Save progress to cloud",
+    "save": "Save Changes",
+    "saving": "Saving...",
+    "saved": "Saved",
+    "saveFailed": "Failed to save"
+  },
+  "achievements": {
+    "title": "Achievements",
+    "subtitle": "Track your accomplishments",
+    "progress": "Achievement Progress",
+    "completed": "Complete",
+    "loading": "Loading..."
+  },
+  "spirits": {
+    "title": "Spirit Book",
+    "subtitle": "Spirits gather as you focus",
+    "collectionProgress": "Collection Progress",
+    "unknown": "???",
+    "conditionHint": "Meet the conditions to encounter this spirit. Keep focusing!",
+    "close": "Close"
+  },
+  "progress": {
+    "sessions": "Sessions",
+    "totalTime": "Total Time",
+    "xp": "XP"
+  },
+  "rarity": {
+    "common": "Common",
+    "uncommon": "Uncommon",
+    "rare": "Rare",
+    "legendary": "Legendary"
+  }
+}

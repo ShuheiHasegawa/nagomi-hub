@@ -1,0 +1,85 @@
+{
+  "landing": {
+    "title": "Nagomi Hub",
+    "subtitle": "没入型の作業BGMとタスク管理で、集中を楽しむ",
+    "enterRoom": "部屋に入る",
+    "entering": "入室中...",
+    "audioHint": "クリックで音声が有効になります",
+    "selectRoom": "お部屋を選んでください"
+  },
+  "features": {
+    "bgm": "LoFi BGM & 環境音",
+    "bgmDesc": "雨・森・波・炎の環境音をミックス",
+    "timer": "ポモドーロタイマー",
+    "timerDesc": "Web Workerで正確な時間管理",
+    "spirits": "精霊コレクション",
+    "spiritsDesc": "集中すると精霊たちが集まってくる",
+    "themes": "9種のテーマ",
+    "themesDesc": "森・海・桜・紅葉など季節に合わせて"
+  },
+  "nav": {
+    "game": "ゲーム画面",
+    "settings": "設定",
+    "achievements": "実績",
+    "spirits": "精霊",
+    "spiritBook": "精霊図鑑",
+    "backToGame": "ゲームに戻る"
+  },
+  "timer": {
+    "title": "ポモドーロタイマー",
+    "work": "作業",
+    "shortBreak": "小休憩",
+    "longBreak": "長休憩",
+    "start": "開始",
+    "pause": "一時停止",
+    "resume": "再開",
+    "stop": "停止",
+    "next": "次のセッション",
+    "completed": "完了セッション"
+  },
+  "settings": {
+    "title": "設定",
+    "customize": "ゲームの設定をカスタマイズ",
+    "music": "音楽設定",
+    "bgmVolume": "BGM音量",
+    "customization": "カスタマイズ",
+    "account": "アカウント設定",
+    "displayName": "表示名",
+    "email": "メールアドレス",
+    "emailReadonly": "メールアドレスは変更できません",
+    "notifications": "通知を受け取る",
+    "notificationsDesc": "タイマー完了などの通知",
+    "dataSync": "データ同期",
+    "dataSyncDesc": "クラウドに進捗を保存",
+    "save": "変更を保存",
+    "saving": "保存中...",
+    "saved": "保存しました",
+    "saveFailed": "保存に失敗しました"
+  },
+  "achievements": {
+    "title": "実績",
+    "subtitle": "あなたの達成を記録",
+    "progress": "実績進捗",
+    "completed": "完了",
+    "loading": "読み込み中..."
+  },
+  "spirits": {
+    "title": "精霊図鑑",
+    "subtitle": "集中することで精霊たちが集まってきます",
+    "collectionProgress": "コレクション進捗",
+    "unknown": "???",
+    "conditionHint": "条件を満たすと出現します。集中を続けましょう。",
+    "close": "閉じる"
+  },
+  "progress": {
+    "sessions": "セッション",
+    "totalTime": "総時間",
+    "xp": "XP"
+  },
+  "rarity": {
+    "common": "コモン",
+    "uncommon": "アンコモン",
+    "rare": "レア",
+    "legendary": "レジェンダリー"
+  }
+}
