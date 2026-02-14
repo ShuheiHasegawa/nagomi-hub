@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Quicksand, Noto_Sans_JP, Playfair_Display } from 'next/font/google'
 
+import { Analytics } from '@vercel/analytics/next'
+
 import { AudioProvider } from '@/components/providers/AudioProvider'
 import { AuthProvider } from '@/components/providers/AuthProvider'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
@@ -28,9 +30,21 @@ const playfairDisplay = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: 'Nagomi Hub - 放置系癒やしゲーム',
-  description: 'リラックスできる放置系の癒やしゲーム',
+  title: 'Nagomi Hub - 没入型 作業BGM & タスク管理',
+  description:
+    'Spirit City: Lofi Sessions 風の没入型作業環境。LoFi BGM・環境音ミキサー・ポモドーロタイマー・精霊コレクションで集中を楽しむ。',
   manifest: '/manifest.json',
+  openGraph: {
+    title: 'Nagomi Hub',
+    description: '没入型の作業BGMとタスク管理で、集中を楽しむ',
+    type: 'website',
+    locale: 'ja_JP',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Nagomi Hub',
+    description: '没入型の作業BGMとタスク管理で、集中を楽しむ',
+  },
 }
 
 export default function RootLayout({
@@ -53,6 +67,7 @@ export default function RootLayout({
             <AudioProvider>{children}</AudioProvider>
           </AuthProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   )

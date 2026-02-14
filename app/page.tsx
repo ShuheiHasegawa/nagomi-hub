@@ -7,6 +7,13 @@ import Link from 'next/link'
 
 import { useAudio } from '@/components/providers/AudioProvider'
 
+const features = [
+  { icon: '🎵', title: 'LoFi BGM & 環境音', desc: '雨・森・波・炎の環境音をミックス' },
+  { icon: '⏱️', title: 'ポモドーロタイマー', desc: 'Web Workerで正確な時間管理' },
+  { icon: '🌿', title: '精霊コレクション', desc: '集中すると精霊たちが集まってくる' },
+  { icon: '🎨', title: '9種のテーマ', desc: '森・海・桜・紅葉など季節に合わせて' },
+]
+
 export default function Home() {
   const [entered, setEntered] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -33,7 +40,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.6 }}
-            className="text-center space-y-8 z-10"
+            className="text-center space-y-8 z-10 max-w-2xl mx-auto"
           >
             <motion.div
               animate={{ opacity: [0.5, 1, 0.5] }}
@@ -45,7 +52,26 @@ export default function Home() {
             <h1 className="text-5xl font-bold text-primary-700 text-shadow-lg font-playfair">
               Nagomi Hub
             </h1>
-            <p className="text-lg text-primary-600/80">リラックスできる作業空間へようこそ</p>
+            <p className="text-lg text-primary-600/80">
+              没入型の作業BGMとタスク管理で、集中を楽しむ
+            </p>
+
+            {/* 機能紹介 */}
+            <div className="grid grid-cols-2 gap-3 text-left">
+              {features.map((f, i) => (
+                <motion.div
+                  key={f.title}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 + i * 0.1 }}
+                  className="glass rounded-xl p-3"
+                >
+                  <div className="text-2xl mb-1">{f.icon}</div>
+                  <p className="text-sm font-semibold text-primary-700">{f.title}</p>
+                  <p className="text-xs text-primary-500/70">{f.desc}</p>
+                </motion.div>
+              ))}
+            </div>
 
             <motion.button
               onClick={handleEnter}
@@ -99,6 +125,12 @@ export default function Home() {
                 className="px-6 py-3 glass-strong rounded-full text-primary-700 font-semibold hover:scale-105 transition-transform"
               >
                 🏆 実績
+              </Link>
+              <Link
+                href="/spirits"
+                className="px-6 py-3 glass-strong rounded-full text-primary-700 font-semibold hover:scale-105 transition-transform"
+              >
+                🌿 精霊図鑑
               </Link>
             </div>
           </motion.div>
