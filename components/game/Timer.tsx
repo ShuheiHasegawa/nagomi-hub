@@ -1,56 +1,38 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useState, useEffect } from 'react'
+
+import { useTimer } from '@/lib/timer/use-timer'
+import type { SessionType } from '@/lib/timer/use-timer'
+
+const SESSION_LABELS: Record<SessionType, string> = {
+  work: '作業',
+  short_break: '休憩',
+  long_break: '長休憩',
+}
 
 export default function Timer() {
-  const [minutes, setMinutes] = useState(25)
-  const [seconds, setSeconds] = useState(0)
-  const [isRunning, setIsRunning] = useState(false)
-  const [isPaused, setIsPaused] = useState(false)
+  const timer = useTimer({
+    onComplete: (sessionType) => {
+      if (sessionType === 'work') {
+        // TODO: M1-6 でSupabaseにセッション記録
+      }
+    },
+  })
 
-  useEffect(() => {
-    if (!isRunning || isPaused) return
-
-    const interval = setInterval(() => {
-      setSeconds((prev) => {
-        if (prev === 0) {
-          if (minutes === 0) {
-            setIsRunning(false)
-            return 0
-          }
-          setMinutes((m) => m - 1)
-          return 59
-        }
-        return prev - 1
-      })
-    }, 1000)
-
-    return () => clearInterval(interval)
-  }, [isRunning, isPaused, minutes])
-
-  const handleStart = () => {
-    setIsRunning(true)
-    setIsPaused(false)
-  }
-
-  const handlePause = () => {
-    setIsPaused(!isPaused)
-  }
-
-  const handleReset = () => {
-    setIsRunning(false)
-    setIsPaused(false)
-    setMinutes(25)
-    setSeconds(0)
-  }
-
-  const totalSeconds = minutes * 60 + seconds
-  const maxSeconds = 25 * 60
-  const progress = ((maxSeconds - totalSeconds) / maxSeconds) * 100
+  const minutes = Math.floor(timer.remaining / 60)
+  const seconds = timer.remaining % 60
+  const progress = timer.total > 0 ? (timer.elapsed / timer.total) * 100 : 0
 
   return (
     <div className="space-y-4">
+      {/* セッション種別表示 */}
+      <div className="text-center">
+        <span className="text-xs font-medium text-base-content/60 uppercase tracking-wider">
+          {SESSION_LABELS[timer.sessionType]}
+        </span>
+      </div>
+
       {/* タイマー表示 */}
       <div className="relative w-40 h-40 sm:w-48 sm:h-48 mx-auto">
         <svg className="transform -rotate-90 w-full h-full">
@@ -74,7 +56,7 @@ export default function Timer() {
             className="text-primary"
             initial={{ pathLength: 0 }}
             animate={{ pathLength: progress / 100 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.5 }}
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
@@ -88,27 +70,55 @@ export default function Timer() {
 
       {/* コントロールボタン */}
       <div className="flex gap-3 justify-center">
-        {!isRunning ? (
+        {timer.status === 'idle' || timer.status === 'completed' ? (
           <button
-            onClick={handleStart}
+            onClick={() => timer.start('work')}
             className="px-6 py-2 bg-primary text-primary-content rounded-full font-semibold hover:opacity-90 transition-opacity"
           >
             開始
           </button>
-        ) : (
+        ) : timer.status === 'running' ? (
           <button
-            onClick={handlePause}
+            onClick={timer.pause}
             className="px-6 py-2 bg-accent text-accent-content rounded-full font-semibold hover:opacity-90 transition-opacity"
           >
-            {isPaused ? '再開' : '一時停止'}
+            一時停止
+          </button>
+        ) : (
+          <button
+            onClick={timer.resume}
+            className="px-6 py-2 bg-accent text-accent-content rounded-full font-semibold hover:opacity-90 transition-opacity"
+          >
+            再開
           </button>
         )}
         <button
-          onClick={handleReset}
+          onClick={timer.stop}
           className="px-6 py-2 glass rounded-full font-semibold text-base-content hover:bg-base-200/30 transition-colors"
         >
           リセット
         </button>
+      </div>
+
+      {/* 完了時の次セッションボタン */}
+      {timer.status === 'completed' && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center"
+        >
+          <button
+            onClick={timer.startNext}
+            className="px-6 py-2 bg-secondary text-secondary-content rounded-full font-semibold hover:opacity-90 transition-opacity"
+          >
+            次へ: {timer.sessionType === 'work' ? '休憩' : '作業'}
+          </button>
+        </motion.div>
+      )}
+
+      {/* セッション数表示 */}
+      <div className="text-center text-xs text-base-content/50">
+        完了セッション: {timer.completedSessions}
       </div>
     </div>
   )
