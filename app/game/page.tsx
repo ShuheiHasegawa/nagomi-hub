@@ -83,6 +83,12 @@ export default function GamePage() {
             設定
           </Link>
           <Link
+            href="/spirits"
+            className="px-4 py-2 glass rounded-full text-sm font-medium text-base-content hover:bg-base-200/30 transition-colors"
+          >
+            精霊
+          </Link>
+          <Link
             href="/achievements"
             className="px-4 py-2 glass rounded-full text-sm font-medium text-base-content hover:bg-base-200/30 transition-colors"
           >
